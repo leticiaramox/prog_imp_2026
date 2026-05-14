@@ -1,0 +1,29 @@
+#include <stdio.h>
+
+typedef union {
+    unsigned char valor;   
+    
+    struct {
+        unsigned char b0 : 1; 
+        unsigned char b1 : 1;
+        unsigned char b2 : 1;
+        unsigned char b3 : 1;
+        unsigned char b4 : 1;
+        unsigned char b5 : 1;
+        unsigned char b6 : 1;
+        unsigned char b7 : 1; 
+    } bits;
+} number;
+
+
+int main () {
+    number value;
+    scanf("%hhu", &value.valor);
+
+    int num = (8 * value.bits.b7) + (4 * value.bits.b6) + (2 * value.bits.b5) + value.bits.b4;
+    int mode = 4 * value.bits.b3 + 2 * value.bits.b2 + value.bits.b1;
+
+    printf("Byte bruto: %hhu | Erro: %hhu | Modo: %d | Leitura: %d\n", value.valor, value.bits.b0, mode, num);
+
+
+}
