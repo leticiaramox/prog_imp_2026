@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef union {
+    unsigned int valor_total;
+
+    struct {
+        unsigned int id            : 10; 
+        unsigned int status        : 3;  
+        unsigned int bateria_baixa : 1;  
+        int temperatura            : 12; 
+        unsigned int paridade      : 6;  
+    } campos;
+    
+} Pacote;
+
+int main() {
+    Pacote* lista_num = NULL;
+    int i = 0;
+
+    while (1) {
+        unsigned int temp_val;
+        // %i detecta 0x automaticamente
+        if (scanf("%i", &temp_val) != 1 || temp_val == 0 || temp_val == "0x0") break;
+
+        Pacote* temp_ptr = realloc(lista_num, (i + 1) * sizeof(Pacote));
+        if (temp_ptr == NULL) {
+            free(lista_num);
+            free(temp_ptr);
+            return 1;
+        }
+        lista_num = temp_ptr;
+        lista_num[i].valor_total = temp_val;
+        i++;
+    }
+
+    for (int j = 0; j < i; j++) {
+        printf("Pacote [%d] - Dado Bruto: 0x%08X\n", j + 1, lista_num[j].valor_total);
+        printf("ID do Sensor    : %u\n", lista_num[j].campos.id);
+        printf("Status     : %u\n", lista_num[j].campos.status);
+        printf("Bateria Baixa   : %s\n", lista_num[j].campos.bateria_baixa ? "SIM (CRITICO)" : "Nao");
+        printf("Temperatura     : %d graus\n", lista_num[j].campos.temperatura);
+        printf("-------------------------------------------------------\n");
+    }
+
+    free(lista_num);
+    return 0;
+}
